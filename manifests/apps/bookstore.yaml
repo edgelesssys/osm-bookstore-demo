@@ -46,7 +46,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: bookstore
-          image: ghcr.io/edgelesssys/osm-bookstore/bookstore:latest
+          image: ghcr.io/edgelesssys/osm-bookstore-demo/bookstore:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 14001

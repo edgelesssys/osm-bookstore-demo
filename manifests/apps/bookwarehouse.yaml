@@ -47,7 +47,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: bookwarehouse
-          image: ghcr.io/edgelesssys/osm-bookstore/bookwarehouse:latest
+          image: ghcr.io/edgelesssys/osm-bookstore-demo/bookwarehouse:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: OE_SIMULATION

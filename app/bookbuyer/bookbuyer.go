@@ -15,6 +15,7 @@ import (
 
 	"github.com/edgelesssys/osm-bookstore-demo/app/common"
 	"github.com/openservicemesh/osm/pkg/logger"
+	"github.com/openservicemesh/osm/pkg/utils"
 )
 
 const (
@@ -26,7 +27,7 @@ var (
 	wg                sync.WaitGroup
 	log               = logger.NewPretty(participantName)
 	port              = flag.Int("port", 14001, "port on which this app is listening for incoming HTTP")
-	numConnectionsStr = common.GetEnv("CI_CLIENT_CONCURRENT_CONNECTIONS", "1")
+	numConnectionsStr = utils.GetEnv("CI_CLIENT_CONCURRENT_CONNECTIONS", "1")
 )
 
 type handler struct {
@@ -36,7 +37,7 @@ type handler struct {
 }
 
 func getIdentity() string {
-	return common.GetEnv("IDENTITY", "Bookbuyer")
+	return utils.GetEnv("IDENTITY", "Bookbuyer")
 }
 
 func renderTemplate(w http.ResponseWriter) {

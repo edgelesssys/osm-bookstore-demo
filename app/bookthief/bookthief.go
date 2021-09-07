@@ -12,6 +12,7 @@ import (
 
 	"github.com/edgelesssys/osm-bookstore-demo/app/common"
 	"github.com/openservicemesh/osm/pkg/logger"
+	"github.com/openservicemesh/osm/pkg/utils"
 )
 
 const (
@@ -39,7 +40,7 @@ func renderTemplate(w http.ResponseWriter) {
 	}
 }
 func getIdentity() string {
-	return common.GetEnv("IDENTITY", "Bookthief")
+	return utils.GetEnv("IDENTITY", "Bookthief")
 }
 
 type handler struct {

@@ -31,8 +31,6 @@
 			"Parameters": {
 				"Argv": [
 					"/bookbuyer",
-					"--path",
-					"/edg/hostfs",
 					"--port",
 					"14001"
 				],
@@ -49,8 +47,6 @@
 			"Parameters": {
 				"Argv": [
 					"/bookthief",
-					"--path",
-					"/edg/hostfs",
 					"--port",
 					"14001"
 				],
@@ -68,8 +64,6 @@
 			"Parameters": {
 				"Argv": [
 					"/bookstore",
-					"--path",
-					"/edg/hostfs",
 					"--port",
 					"14001"
 				],

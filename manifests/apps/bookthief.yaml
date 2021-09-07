@@ -31,7 +31,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: bookthief
-          image: ghcr.io/edgelesssys/osm-bookstore/bookthief:latest
+          image: ghcr.io/edgelesssys/osm-bookstore-demo/bookthief:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: OE_SIMULATION

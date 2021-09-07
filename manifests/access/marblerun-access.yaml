@@ -9,10 +9,8 @@ spec:
     name: marblerun
     namespace: marblerun-coordinator
   rules:
-  - kind: HTTPRouteGroup
+  - kind: TCPRoute
     name: marble-activation
-    matches:
-    - activate
   sources:
   - kind: ServiceAccount
     name: bookbuyer
@@ -24,12 +22,11 @@ spec:
     name: bookwarehouse
 ---
 apiVersion: specs.smi-spec.io/v1alpha4
-kind: HTTPRouteGroup
+kind: TCPRoute
 metadata:
   name: marble-activation
   namespace: marblerun
 spec:
   matches:
-  - name: activation
-    pathRegex: ".*"
-    methods: ["*"]
+    ports:
+    - 2001

@@ -32,7 +32,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: bookbuyer
-          image: ghcr.io/edgelesssys/osm-bookstore/bookbuyer:latest
+          image: ghcr.io/edgelesssys/osm-bookstore-demo/bookbuyer:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: OE_SIMULATION

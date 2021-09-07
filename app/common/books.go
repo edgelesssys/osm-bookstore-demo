@@ -1,6 +1,7 @@
 package common
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -12,6 +13,7 @@ import (
 	"time"
 
 	"github.com/openservicemesh/osm/pkg/logger"
+	"github.com/openservicemesh/osm/pkg/utils"
 )
 
 // BookBuyerPurchases is all of the books that the bookbuyer has bought
@@ -52,10 +54,10 @@ var (
 	// enableEgress determines whether egress is enabled
 	enableEgress = os.Getenv(EnableEgressEnvVar) == "true"
 
-	sleepDurationBetweenRequestsSecondsStr = GetEnv("CI_SLEEP_BETWEEN_REQUESTS_SECONDS", "1")
-	minSuccessThresholdStr                 = GetEnv("CI_MIN_SUCCESS_THRESHOLD", "1")
-	maxIterationsStr                       = GetEnv("CI_MAX_ITERATIONS_THRESHOLD", "0") // 0 for unlimited
-	bookstoreServiceName                   = GetEnv("BOOKSTORE_SVC", "bookstore")
+	sleepDurationBetweenRequestsSecondsStr = utils.GetEnv("CI_SLEEP_BETWEEN_REQUESTS_SECONDS", "1")
+	minSuccessThresholdStr                 = utils.GetEnv("CI_MIN_SUCCESS_THRESHOLD", "1")
+	maxIterationsStr                       = utils.GetEnv("CI_MAX_ITERATIONS_THRESHOLD", "0") // 0 for unlimited
+	bookstoreServiceName                   = utils.GetEnv("BOOKSTORE_SVC", "bookstore")
 	bookstoreNamespace                     = os.Getenv(BookstoreNamespaceEnvVar)
 	warehouseServiceName                   = "bookwarehouse"
 	bookwarehouseNamespace                 = os.Getenv(BookwarehouseNamespaceEnvVar)
@@ -65,9 +67,9 @@ var (
 	// https://kubernetes.io/docs/setup/production-environment/windows/intro-windows-in-kubernetes/#dns-limitations
 	bookstoreService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", bookstoreServiceName, bookstoreNamespace, bookstorePort)
 	warehouseService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", bookwarehouseNamespace, warehouseServiceName, bookwarehousePort)
-	booksBought      = fmt.Sprintf("http://%s/books-bought", bookstoreService)
-	buyBook          = fmt.Sprintf("http://%s/buy-a-book/new", bookstoreService)
-	chargeAccountURL = fmt.Sprintf("http://%s/%s", warehouseService, RestockWarehouseURL)
+	booksBought      = fmt.Sprintf("https://%s/books-bought", bookstoreService)
+	buyBook          = fmt.Sprintf("https://%s/buy-a-book/new", bookstoreService)
+	chargeAccountURL = fmt.Sprintf("https://%s/%s", warehouseService, RestockWarehouseURL)
 
 	interestingHeaders = []string{
 		IdentityHeader,
@@ -92,20 +94,17 @@ var (
 
 var log = logger.NewPretty("demo")
 
-// Getenv returns the env variable if it is set, otherwise returns the default value
-func GetEnv(envVar, defaultValue string) string {
-	val := os.Getenv(envVar)
-	if val == "" {
-		return defaultValue
-	}
-	return envVar
-}
-
 // RestockBooks restocks the bookstore with certain amount of books from the warehouse.
 func RestockBooks(amount int) {
 	log.Info().Msgf("Restocking from book warehouse with %d books", amount)
 
-	client := &http.Client{}
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}
 	requestBody := strings.NewReader(strconv.Itoa(1))
 	req, err := http.NewRequest("POST", chargeAccountURL, requestBody)
 	req.Host = (fmt.Sprintf("%s.%s", warehouseServiceName, bookwarehouseNamespace))
@@ -249,7 +248,13 @@ func allUrlsSucceeded(urlSucceeded map[string]bool) bool {
 func fetch(url string) (responseCode int, identity string) {
 	headersMap := urlHeadersMap[url]
 
-	client := &http.Client{}
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Printf("Error requesting %s: %s\n", url, err)
@@ -313,7 +318,7 @@ func getEnvVars(participantName string) (minSuccessThreshold int64, maxIteration
 
 // GetExpectedResponseCodeFromEnvVar returns the expected response code based on the given environment variable
 func GetExpectedResponseCodeFromEnvVar(envVar, defaultValue string) int {
-	expectedRespCodeStr := GetEnv(envVar, defaultValue)
+	expectedRespCodeStr := utils.GetEnv(envVar, defaultValue)
 	expectedRespCode, err := strconv.ParseInt(expectedRespCodeStr, 10, 0)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Could not convert environment variable %s='%s' to int", envVar, expectedRespCodeStr)

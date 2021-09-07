@@ -1,8 +1,8 @@
 #!make
 
 SIGNING_KEY		?= private.pem
-EDG_REGISTRY    ?= ghcr.io/edgelesssys/osm-bookstore-demo
-EDG_TAG         ?= latest
+DOCKER_REGISTRY    ?= ghcr.io/edgelesssys/osm-bookstore-demo
+DOCKER_TAG         ?= latest
 
 all: build
 
@@ -20,7 +20,7 @@ DOCKER_DEMO_TARGETS = $(addprefix docker-build-, $(DEMO_TARGETS))
 .PHONY: $(DOCKER_DEMO_TARGETS)
 $(DOCKER_DEMO_TARGETS): NAME=$(@:docker-build-%=%)
 $(DOCKER_DEMO_TARGETS):
-	docker buildx build -t $(EDG_REGISTRY)/$(NAME):$(EDG_TAG) --secret id=signingkey,src=$(SIGNING_KEY) --target $(NAME) .
+	docker buildx build -t $(DOCKER_REGISTRY)/$(NAME):$(DOCKER_TAG) --secret id=signingkey,src=$(SIGNING_KEY) --target $(NAME) .
 
 build: bin_folder $(DEMO_BUILD_TARGETS)
 
@@ -30,4 +30,4 @@ clean:
 	rm -r ./app/bin
 
 clean-docker:
-	docker rmi $(EDG_REGISTRY)/bookbuyer:$(EDG_TAG) $(EDG_REGISTRY)/bookthief:$(EDG_TAG) $(EDG_REGISTRY)/bookstore:$(EDG_TAG) $(EDG_REGISTRY)/bookwarehouse:$(EDG_TAG)
+	docker rmi $(DOCKER_REGISTRY)/bookbuyer:$(DOCKER_TAG) $(DOCKER_REGISTRY)/bookthief:$(DOCKER_TAG) $(DOCKER_REGISTRY)/bookstore:$(DOCKER_TAG) $(DOCKER_REGISTRY)/bookwarehouse:$(DOCKER_TAG)
