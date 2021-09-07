@@ -1,0 +1,38 @@
+# Create bookthief ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookthief
+  namespace: bookthief
+
+---
+# Create bookthief Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookthief
+  namespace: bookthief
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookthief
+  template:
+    metadata:
+      labels:
+        app: bookthief
+        version: v1
+        marblerun/marbletype: bookthief
+        marblerun/marblecontainer: bookthief
+    spec:
+      serviceAccountName: bookthief
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux
+      containers:
+        - name: bookthief
+          image: ghcr.io/edgelesssys/osm-bookstore/bookthief:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OE_SIMULATION
+              value: "1"

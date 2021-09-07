@@ -1,0 +1,54 @@
+# Create bookwarehouse Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookwarehouse
+  namespace: bookwarehouse
+
+---
+# Create bookwarehouse Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookwarehouse
+  namespace: bookwarehouse
+  labels:
+    app: bookwarehouse
+spec:
+  ports:
+    - port: 14001
+      name: bookwarehouse-port
+  selector:
+    app: bookwarehouse
+
+---
+# Create bookwarehouse Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookwarehouse
+  namespace: bookwarehouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookwarehouse
+  template:
+    metadata:
+      labels:
+        app: bookwarehouse
+        version: v1
+        marblerun/marbletype: bookwarehouse
+        marblerun/marblecontainer: bookwarehouse
+    spec:
+      serviceAccountName: bookwarehouse
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux
+      containers:
+        - name: bookwarehouse
+          image: ghcr.io/edgelesssys/osm-bookstore/bookwarehouse:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OE_SIMULATION
+              value: "1"

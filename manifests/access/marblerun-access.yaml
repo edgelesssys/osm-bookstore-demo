@@ -1,0 +1,35 @@
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha3
+metadata:
+  name: marblerun-traffic-target
+  namespace: marblerun
+spec:
+  destination:
+    kind: ServiceAccount
+    name: marblerun
+    namespace: marblerun-coordinator
+  rules:
+  - kind: HTTPRouteGroup
+    name: marble-activation
+    matches:
+    - activate
+  sources:
+  - kind: ServiceAccount
+    name: bookbuyer
+  - kind: ServiceAccount
+    name: bookthief
+  - kind: ServiceAccount
+    name: bookstore
+  - kind: ServiceAccount
+    name: bookwarehouse
+---
+apiVersion: specs.smi-spec.io/v1alpha4
+kind: HTTPRouteGroup
+metadata:
+  name: marble-activation
+  namespace: marblerun
+spec:
+  matches:
+  - name: activation
+    pathRegex: ".*"
+    methods: ["*"]

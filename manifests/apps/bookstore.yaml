@@ -1,0 +1,56 @@
+# Create bookstore Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookstore
+  namespace: bookstore
+  labels:
+    app: bookstore
+spec:
+  ports:
+    - port: 14001
+      name: bookstore-port
+  selector:
+    app: bookstore
+
+---
+# Create bookstore Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookstore
+  namespace: bookstore
+
+---
+# Create bookstore Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstore
+  namespace: bookstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstore
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        marblerun/marbletype: bookstore
+        marblerun/marblecontainer: bookstore
+    spec:
+      serviceAccountName: bookstore
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux
+      containers:
+        - name: bookstore
+          image: ghcr.io/edgelesssys/osm-bookstore/bookstore:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 14001
+              name: web
+          env:
+            - name: OE_SIMULATION
+              value: "1"

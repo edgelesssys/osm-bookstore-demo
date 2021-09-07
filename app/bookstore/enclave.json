@@ -1,0 +1,8 @@
+{
+    "exe": "./app/bin/bookstore",
+    "key": "private.pem",
+    "debug": true,
+    "heapsize": 512,
+    "productID": 10,
+    "securityVersion": 1
+}

@@ -1,0 +1,8 @@
+{
+    "exe": "./app/bin/bookthief",
+    "key": "private.pem",
+    "debug": true,
+    "heapsize": 512,
+    "productID": 9,
+    "securityVersion": 1
+}

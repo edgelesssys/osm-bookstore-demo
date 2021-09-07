@@ -1,0 +1,8 @@
+{
+    "exe": "./app/bin/bookbuyer",
+    "key": "private.pem",
+    "debug": true,
+    "heapsize": 512,
+    "productID": 8,
+    "securityVersion": 1
+}

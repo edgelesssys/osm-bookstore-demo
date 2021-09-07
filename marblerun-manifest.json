@@ -1,0 +1,118 @@
+{
+	"Packages": {
+		"bookbuyer": {
+			"Debug": true,
+			"SecurityVersion": 1,
+			"ProductID": 8,
+			"SignerID": "43361affedeb75affee9baec7e054a5e14883213e5a121b67d74a0e12e9d2b7a"
+		},
+		"bookthief": {
+			"Debug": true,
+			"SecurityVersion": 1,
+			"ProductID": 9,
+			"SignerID": "43361affedeb75affee9baec7e054a5e14883213e5a121b67d74a0e12e9d2b7a"
+		},
+		"bookstore": {
+			"Debug": true,
+			"SecurityVersion": 1,
+			"ProductID": 10,
+			"SignerID": "43361affedeb75affee9baec7e054a5e14883213e5a121b67d74a0e12e9d2b7a"
+		},
+		"bookwarehouse": {
+			"Debug": true,
+			"SecurityVersion": 1,
+			"ProductID": 11,
+			"SignerID": "43361affedeb75affee9baec7e054a5e14883213e5a121b67d74a0e12e9d2b7a"
+		}
+	},
+	"Marbles": {
+		"bookbuyer": {
+			"Package": "bookbuyer",
+			"Parameters": {
+				"Argv": [
+					"/bookbuyer",
+					"--path",
+					"/edg/hostfs",
+					"--port",
+					"14001"
+				],
+				"Env": {
+					"BOOKSTORE_NAMESPACE": "bookstore",
+					"BOOKSTORE_SVC": "bookstore",
+					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
+					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+				}
+			}
+		},
+		"bookthief": {
+			"Package": "bookthief",
+			"Parameters": {
+				"Argv": [
+					"/bookthief",
+					"--path",
+					"/edg/hostfs",
+					"--port",
+					"14001"
+				],
+				"Env": {
+					"BOOKSTORE_NAMESPACE": "bookstore",
+					"BOOKSTORE_SVC": "bookstore",
+					"BOOKTHIEF_EXPECTED_RESPONSE_CODE": "503",
+					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
+					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+				}
+			}
+		},
+		"bookstore": {
+			"Package": "bookstore",
+			"Parameters": {
+				"Argv": [
+					"/bookstore",
+					"--path",
+					"/edg/hostfs",
+					"--port",
+					"14001"
+				],
+				"Env": {
+					"BOOKWAREHOUSE_NAMESPACE": "bookwarehouse",
+					"IDENTITY": "bookstore-v1",
+					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
+					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}",
+					"SQL_CERT": "{{ pem .Secrets.sqlCert.Cert }}",
+					"SQL_KEY": "{{ pem .Secrets.sqlCert.Private }}"
+				}
+			}
+		},
+		"bookwarehouse": {
+			"Package": "bookwarehouse",
+			"Parameters": {
+				"Argv": [
+					"/bookwarehouse",
+					"--port",
+					"14001"
+				],
+				"Env": {
+					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
+					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+				}
+			}
+		}
+	},
+	"Secrets": {
+		"webpageCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false
+		},
+		"sqlCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false,
+			"Cert": {
+				"Subject": {
+					"CommonName": "bookstore"
+				}
+			}
+		}
+	}
+}
