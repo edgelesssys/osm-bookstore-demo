@@ -64,11 +64,12 @@
 				],
 				"Env": {
 					"BOOKSTORE_NAMESPACE": "bookstore",
-					"BOOKSTORE_SVC": "bookstore",
-					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
-					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+					"BOOKSTORE_SVC": "bookstore"
 				}
-			}
+			},
+			"TLS": [
+				"bookstore-tls"
+			]
 		},
 		"bookthief": {
 			"Package": "bookthief",
@@ -81,11 +82,12 @@
 				"Env": {
 					"BOOKSTORE_NAMESPACE": "bookstore",
 					"BOOKSTORE_SVC": "bookstore",
-					"BOOKTHIEF_EXPECTED_RESPONSE_CODE": "503",
-					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
-					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+					"BOOKTHIEF_EXPECTED_RESPONSE_CODE": "503"
 				}
-			}
+			},
+			"TLS": [
+				"bookstore-tls"
+			]
 		},
 		"bookstore": {
 			"Package": "bookstore",
@@ -97,11 +99,12 @@
 				],
 				"Env": {
 					"BOOKWAREHOUSE_NAMESPACE": "bookwarehouse",
-					"IDENTITY": "bookstore-v1",
-					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
-					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+					"IDENTITY": "bookstore-v1"
 				}
-			}
+			},
+			"TLS": [
+				"bookstore-tls"
+			]
 		},
 		"bookstore-v2": {
 			"Package": "bookstore",
@@ -113,11 +116,12 @@
 				],
 				"Env": {
 					"BOOKWAREHOUSE_NAMESPACE": "bookwarehouse",
-					"IDENTITY": "bookstore-v2",
-					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
-					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}"
+					"IDENTITY": "bookstore-v2"
 				}
-			}
+			},
+			"TLS": [
+				"bookstore-tls"
+			]
 		},
 		"bookwarehouse": {
 			"Package": "bookwarehouse",
@@ -128,12 +132,13 @@
 					"14001"
 				],
 				"Env": {
-					"WEB_CERT": "{{ pem .Secrets.webpageCert.Cert }}",
-					"WEB_KEY": "{{ pem .Secrets.webpageCert.Private }}",
 					"SQL_CERT": "{{ pem .Secrets.sqlCert.Cert }}",
 					"SQL_KEY": "{{ pem .Secrets.sqlCert.Private }}"
 				}
-			}
+			},
+			"TLS": [
+				"bookwarehouse-tls"
+			]
 		}
 	},
 	"Secrets": {
@@ -172,6 +177,69 @@
 					"mysql.bookwarehouse"
 				]
 			}
+		}
+	},
+	"TLS": {
+		"bookbuyer-tls": {
+			"Outgoing": [
+				{
+					"Port": "14001",
+					"Addr": "bookstore.bookstore"
+				},
+				{
+					"Port": "14001",
+					"Addr": "bookstore-v2.bookstore"
+				}
+			],
+			"Incoming": [
+				{
+					"Port": "14001",
+					"Cert": "webpageCert",
+					"DisableClientAuth": true
+				}
+			]
+		},
+		"bookstore-backend": {
+			"Outgoing": [
+				{
+					"Port": "14001",
+					"Addr": "bookwarehouse.bookwarehouse"
+				}
+			],
+			"Incoming": [
+				{
+					"Port": "14001",
+					"Cert": "webpageCert",
+					"DisableClientAuth": true
+				}
+			]
+		},
+		"bookthief-tls": {
+			"Outgoing": [
+				{
+					"Port": "14001",
+					"Addr": "bookstore.bookstore"
+				},
+				{
+					"Port": "14001",
+					"Addr": "bookstore-v2.bookstore"
+				}
+			],
+			"Incoming": [
+				{
+					"Port": "14001",
+					"Cert": "webpageCert",
+					"DisableClientAuth": true
+				}
+			]
+		},
+		"bookwarehouse-tls": {
+			"Outgoing": [],
+			"Incoming": [
+				{
+					"Port": "14001"
+				}
+			]
 		}
 	}
 }
