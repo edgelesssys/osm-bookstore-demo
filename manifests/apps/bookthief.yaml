@@ -4,7 +4,6 @@ kind: ServiceAccount
 metadata:
   name: bookthief
   namespace: bookthief
-
 ---
 # Create bookthief Deployment
 apiVersion: apps/v1
@@ -33,6 +32,3 @@ spec:
         - name: bookthief
           image: ghcr.io/edgelesssys/osm-bookstore-demo/bookthief:latest
           imagePullPolicy: IfNotPresent
-          env:
-            - name: OE_SIMULATION
-              value: "1"

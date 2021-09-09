@@ -4,7 +4,6 @@ kind: ServiceAccount
 metadata:
   name: bookwarehouse
   namespace: bookwarehouse
-
 ---
 # Create bookwarehouse Service
 apiVersion: v1
@@ -21,7 +20,6 @@ spec:
       appProtocol: tcp
   selector:
     app: bookwarehouse
-
 ---
 # Create bookwarehouse Deployment
 apiVersion: apps/v1
@@ -50,6 +48,3 @@ spec:
         - name: bookwarehouse
           image: ghcr.io/edgelesssys/osm-bookstore-demo/bookwarehouse:latest
           imagePullPolicy: IfNotPresent
-          env:
-            - name: OE_SIMULATION
-              value: "1"

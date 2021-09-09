@@ -38,7 +38,7 @@ spec:
     metadata:
       labels:
         app: bookstore-v2
-        marblerun/marbletype: bookstore
+        marblerun/marbletype: bookstore-v2
         marblerun/marblecontainer: bookstore
     spec:
       serviceAccountName: bookstore-v2
@@ -52,10 +52,6 @@ spec:
           ports:
             - containerPort: 14001
               name: web
-          env:
-            - name: OE_SIMULATION
-              value: "1"
-
 ---
 kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha3

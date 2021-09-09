@@ -4,7 +4,6 @@ kind: ServiceAccount
 metadata:
   name: bookbuyer
   namespace: bookbuyer
-
 ---
 # Create bookbuyer Deployment
 apiVersion: apps/v1
@@ -34,6 +33,3 @@ spec:
         - name: bookbuyer
           image: ghcr.io/edgelesssys/osm-bookstore-demo/bookbuyer:latest
           imagePullPolicy: IfNotPresent
-          env:
-            - name: OE_SIMULATION
-              value: "1"

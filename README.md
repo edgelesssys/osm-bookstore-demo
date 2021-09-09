@@ -17,11 +17,11 @@ Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/
 * The [OSM command-line tool](https://docs.openservicemesh.io/docs/guides/cli/) setup
 * The [Kubernetes command-line tool](https://kubernetes.io/docs/tasks/tools/#kubectl) - `kubectl`
 
-## Install the controll plane
+## Install the control plane
 ### Install OSM
 
 ```bash
-osm install --set=OpenServiceMesh.enablePermissiveTrafficPolicy=true --set=OpenServiceMesh.useHTTPSIngress=true
+osm install --set=OpenServiceMesh.enablePermissiveTrafficPolicy=true --set=OpenServiceMesh.enableEgress=true
 ```
 
 ### Install MarbleRun
@@ -98,8 +98,8 @@ kubectl apply -f manifests/apps/bookthief.yaml
 
 ## Checkpoint: What go installed?
 
-The Open Service Mesh controll plane and MarbleRun's controll plane.
-A Kubernetes Deployment and Pods for each of `bookbuyer`, `bookthief`, `bookstore` and `bookwarehouse`. Also, Kubernetes Services and Endpoints for `bookstore` and `bookwarehouse`.
+The Open Service Mesh control plane and MarbleRun's control plane.
+A Kubernetes Deployment and pods for each of `bookbuyer`, `bookthief`, `bookstore` and `bookwarehouse`. Also, Kubernetes Services and Endpoints for `bookstore` and `bookwarehouse`.
 
 To view these resources on your cluster, run the following commands:
 ```bash
@@ -175,7 +175,7 @@ Lets restart the `bookthief` deployment to test this.
 kubectl rollout restart deployment -n bookthief bookthief
 ```
 
-The newly created `bookthief` Pod should now error on startup. Inspect the logs to verify this error occurs when the activation request is send.
+The newly created `bookthief` pod should now error on startup. Inspect the logs to verify this error occurs when the activation request is send.
 ```bash
 kubectl logs -n bookthief deployment/bookthief bookthief
 ```
@@ -195,6 +195,8 @@ Apply the [SMI Traffic Target][https://github.com/servicemeshinterface/smi-spec/
     ```bash
     kubectl rollout restart deployment -n bookthief bookthief
     ```
+
+    Restart `./scripts/port-forward-all.sh`
 
 1. Allow traffic between `bookstore`, `bookbuyer`, and `bookthief`
 
@@ -329,7 +331,7 @@ We will now demonstrate Open Service Meshe's traffic split feature, by dividing 
     The count for books sold from `bookstore` will stop incrementing because all traffic is redirected to the `bookstore-v2` backend
 
 
-# Docker
+## Docker
 
 1. Generate a signing key
 
@@ -353,7 +355,7 @@ We will now demonstrate Open Service Meshe's traffic split feature, by dividing 
 
 >Note: If you build your own images, you will have to change the used images in `manifests/apps/`
 
-# License
+## License
 
 Copyright 2020 Open Service Mesh Authors.
 
