@@ -18,6 +18,7 @@ spec:
   ports:
     - port: 14001
       name: bookwarehouse-port
+      appProtocol: tcp
   selector:
     app: bookwarehouse
 

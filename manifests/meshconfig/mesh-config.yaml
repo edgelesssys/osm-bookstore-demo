@@ -11,15 +11,10 @@ spec:
     initContainerImage: "openservicemesh/init:v0.9.2"
     configResyncInterval: "0s"
   traffic:
-    enableEgress: false
-    useHTTPSIngress: false
+    enableEgress: true
+    useHTTPSIngress: true
     enablePermissiveTrafficPolicyMode: true
   observability:
     enableDebugServer: true
-    outboundPortExclusionList: []
-    inboundPortExclusionList: []
-    outboundIPRangeExclusionList: []
     tracing:
       enable: false
-  certificate:
-    serviceCertValidityDuration: 24h

@@ -9,11 +9,8 @@ spec:
     name: bookstore-v2
     namespace: bookstore
   rules:
-  - kind: HTTPRouteGroup
+  - kind: TCPRoute
     name: bookstore-service-routes
-    matches:
-    - buy-a-book
-    - books-bought
   sources:
   - kind: ServiceAccount
     name: bookbuyer

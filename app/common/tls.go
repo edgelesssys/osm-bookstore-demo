@@ -20,6 +20,7 @@ func ListenAndServeTLS(port int, handler *mux.Router) {
 		TLSConfig: &tls.Config{
 			Certificates: []tls.Certificate{cert},
 		},
+		Handler: handler,
 	}
 
 	if err := server.ListenAndServeTLS("", ""); err != nil {

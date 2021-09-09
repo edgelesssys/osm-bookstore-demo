@@ -10,6 +10,7 @@ spec:
   ports:
     - port: 14001
       name: bookstore-port
+      appProtocol: tcp
   selector:
     app: bookstore
 

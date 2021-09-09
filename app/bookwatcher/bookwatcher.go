@@ -1,12 +1,15 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/edgelesssys/osm-bookstore-demo/app/common"
@@ -14,9 +17,14 @@ import (
 
 const (
 	bookBuyerPort   = 8080
-	bookStoreV1Port = 8081
+	bookStoreV1Port = 8084
 	bookStoreV2Port = 8082
 	bookThiefPort   = 8083
+)
+
+var (
+	client   *http.Client
+	certFile = flag.String("c", "marblerun.crt", "CA certificate to use as a root of trust")
 )
 
 func clearScreen() {
@@ -35,10 +43,9 @@ func printRedln(msg string) {
 	fmt.Printf("\033[31m%s\033[0m\n", msg)
 }
 
-func getBookData(dest interface{}, port int, wg *sync.WaitGroup, errc chan<- error) {
-	defer wg.Done()
+func getBookData(dest interface{}, port int, errc chan<- error) {
 
-	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/raw", port))
+	resp, err := client.Get(fmt.Sprintf("https://localhost:%d/raw", port))
 	if err != nil {
 		errc <- fmt.Errorf("error fetching data (port %d): %v", port, err)
 		return
@@ -59,60 +66,88 @@ func getBookData(dest interface{}, port int, wg *sync.WaitGroup, errc chan<- err
 	if err != nil {
 		errc <- fmt.Errorf("error unmarshalling data (port %d): %v", port, err)
 	}
+	errc <- nil
 }
 
 func main() {
+	flag.Parse()
+	raw, err := ioutil.ReadFile(*certFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var certs []*pem.Block
+	block, rest := pem.Decode(raw)
+	if block == nil {
+		log.Fatal("could not parse certificate")
+	}
+	certs = append(certs, block)
+	for len(rest) > 0 {
+		block, rest = pem.Decode([]byte(rest))
+		if block == nil {
+			log.Fatal("could not parse certificate chain")
+		}
+		certs = append(certs, block)
+	}
+	certPool := x509.NewCertPool()
+	if ok := certPool.AppendCertsFromPEM(pem.EncodeToMemory(certs[len(certs)-1])); !ok {
+		log.Fatal("failed to parse certificate")
+	}
+	if len(certs) > 1 {
+		if ok := certPool.AppendCertsFromPEM(pem.EncodeToMemory(certs[0])); !ok {
+			log.Fatal("failed to parse certificate")
+		}
+	}
+	client = &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				RootCAs: certPool,
+			},
+		},
+	}
+
 	bookBuyerPurchases := &common.BookBuyerPurchases{}
 	bookThiefThievery := &common.BookThiefThievery{}
 	bookStorePurchasesV1 := &common.BookStorePurchases{}
 	bookStorePurchasesV2 := &common.BookStorePurchases{}
-	wg := &sync.WaitGroup{}
-	errc := make(chan error, 4)
 
 	for {
-		clearScreen()
+		errc := make(chan error, 4)
 
 		bookBuyerPurchasesTemp := *bookBuyerPurchases
-		wg.Add(1)
-		go getBookData(bookBuyerPurchases, bookBuyerPort, wg, errc)
+		go getBookData(bookBuyerPurchases, bookBuyerPort, errc)
 
 		bookThiefThieveryTemp := *bookThiefThievery
-		wg.Add(1)
-		go getBookData(bookThiefThievery, bookThiefPort, wg, errc)
+		go getBookData(bookThiefThievery, bookThiefPort, errc)
 
 		bookStorePurchasesV1Temp := *bookStorePurchasesV1
-		wg.Add(1)
-		go getBookData(bookStorePurchasesV1, bookStoreV1Port, wg, errc)
+		go getBookData(bookStorePurchasesV1, bookStoreV1Port, errc)
 
 		bookStorePurchasesV2Temp := *bookStorePurchasesV2
-		wg.Add(1)
-		go getBookData(bookStorePurchasesV2, bookStoreV2Port, wg, errc)
+		go getBookData(bookStorePurchasesV2, bookStoreV2Port, errc)
 
-		complete := make(chan bool)
-		go func() {
-			wg.Wait()
-			close(complete)
-		}()
-
-		select {
-		case err := <-errc:
-			wg.Wait()
-			close(errc)
-			log.Fatal(err)
-		case <-complete:
+		var errs []error
+		for i := 0; i < 4; i++ {
+			errs = append(errs, <-errc)
 		}
 
-		bookBuyerHasChanged := bookBuyerPurchases.BooksBought-bookBuyerPurchasesTemp.BooksBought != 0 ||
-			bookBuyerPurchases.BooksBoughtV1-bookBuyerPurchasesTemp.BooksBoughtV1 != 0 ||
-			bookBuyerPurchases.BooksBoughtV2-bookBuyerPurchasesTemp.BooksBoughtV2 != 0
+		bookBuyerHasChanged := (bookBuyerPurchases.BooksBought-bookBuyerPurchasesTemp.BooksBought) != 0 ||
+			(bookBuyerPurchases.BooksBoughtV1-bookBuyerPurchasesTemp.BooksBoughtV1) != 0 ||
+			(bookBuyerPurchases.BooksBoughtV2-bookBuyerPurchasesTemp.BooksBoughtV2) != 0
 
-		bookThiefHasChanged := bookThiefThievery.BooksStolen-bookThiefThieveryTemp.BooksStolen != 0 ||
-			bookThiefThievery.BooksStolenV1-bookThiefThieveryTemp.BooksStolenV1 != 0 ||
-			bookThiefThievery.BooksStolenV2-bookThiefThieveryTemp.BooksStolenV2 != 0
+		bookThiefHasChanged := (bookThiefThievery.BooksStolen-bookThiefThieveryTemp.BooksStolen) != 0 ||
+			(bookThiefThievery.BooksStolenV1-bookThiefThieveryTemp.BooksStolenV1) != 0 ||
+			(bookThiefThievery.BooksStolenV2-bookThiefThieveryTemp.BooksStolenV2) != 0
 
-		bookStoreV1HasChanged := bookStorePurchasesV1.BooksSold-bookStorePurchasesV1Temp.BooksSold != 0
-		bookStoreV2HasChanged := bookStorePurchasesV2.BooksSold-bookStorePurchasesV2Temp.BooksSold != 0
+		bookStoreV1HasChanged := (bookStorePurchasesV1.BooksSold - bookStorePurchasesV1Temp.BooksSold) != 0
+		bookStoreV2HasChanged := (bookStorePurchasesV2.BooksSold - bookStorePurchasesV2Temp.BooksSold) != 0
 
+		clearScreen()
+		for _, err := range errs {
+			if err != nil {
+				log.Println(err)
+			}
+		}
 		printFunc := printYellowln
 		if bookBuyerHasChanged {
 			printFunc = printGreenln

@@ -6,20 +6,27 @@ metadata:
 spec:
   destination:
     kind: ServiceAccount
-    name: marblerun
-    namespace: marblerun-coordinator
+    name: marblerun-coordinator
+    namespace: marblerun
   rules:
   - kind: TCPRoute
     name: marble-activation
   sources:
   - kind: ServiceAccount
     name: bookbuyer
+    namespace: bookbuyer
   - kind: ServiceAccount
     name: bookthief
+    namespace: bookthief
   - kind: ServiceAccount
     name: bookstore
+    namespace: bookstore
+  - kind: ServiceAccount
+    name: bookstore-v2
+    namespace: bookstore
   - kind: ServiceAccount
     name: bookwarehouse
+    namespace: bookwarehouse
 ---
 apiVersion: specs.smi-spec.io/v1alpha4
 kind: TCPRoute
@@ -28,5 +35,4 @@ metadata:
   namespace: marblerun
 spec:
   matches:
-    ports:
-    - 2001
+    ports: []
