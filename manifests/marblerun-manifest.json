@@ -199,7 +199,7 @@
 				}
 			]
 		},
-		"bookstore-backend": {
+		"bookstore-tls": {
 			"Outgoing": [
 				{
 					"Port": "14001",

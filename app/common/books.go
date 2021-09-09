@@ -1,7 +1,6 @@
 package common
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -67,9 +66,9 @@ var (
 	// https://kubernetes.io/docs/setup/production-environment/windows/intro-windows-in-kubernetes/#dns-limitations
 	bookstoreService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", bookstoreServiceName, bookstoreNamespace, bookstorePort)
 	warehouseService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", bookwarehouseNamespace, warehouseServiceName, bookwarehousePort)
-	booksBought      = fmt.Sprintf("https://%s/books-bought", bookstoreService)
-	buyBook          = fmt.Sprintf("https://%s/buy-a-book/new", bookstoreService)
-	chargeAccountURL = fmt.Sprintf("https://%s/%s", warehouseService, RestockWarehouseURL)
+	booksBought      = fmt.Sprintf("http://%s/books-bought", bookstoreService)
+	buyBook          = fmt.Sprintf("http://%s/buy-a-book/new", bookstoreService)
+	chargeAccountURL = fmt.Sprintf("http://%s/%s", warehouseService, RestockWarehouseURL)
 
 	interestingHeaders = []string{
 		IdentityHeader,
@@ -98,13 +97,7 @@ var log = logger.NewPretty("demo")
 func RestockBooks(amount int) {
 	log.Info().Msgf("Restocking from book warehouse with %d books", amount)
 
-	client := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: true,
-			},
-		},
-	}
+	client := &http.Client{}
 	requestBody := strings.NewReader(strconv.Itoa(1))
 	req, err := http.NewRequest("POST", chargeAccountURL, requestBody)
 	req.Host = (fmt.Sprintf("%s.%s", warehouseServiceName, bookwarehouseNamespace))
@@ -248,13 +241,7 @@ func allUrlsSucceeded(urlSucceeded map[string]bool) bool {
 func fetch(url string) (responseCode int, identity string) {
 	headersMap := urlHeadersMap[url]
 
-	client := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: true,
-			},
-		},
-	}
+	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Printf("Error requesting %s: %s\n", url, err)
