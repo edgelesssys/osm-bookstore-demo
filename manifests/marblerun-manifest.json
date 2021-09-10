@@ -142,6 +142,58 @@
 		}
 	},
 	"Secrets": {
+		"bookbuyerCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false,
+			"Cert": {
+				"Subject": {
+					"DNSNames": [
+						"localhost",
+						"bookbuyer.bookbuyer.svc.cluster.local"
+					]
+				}
+			}
+		},
+		"bookstoreCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false,
+			"Cert": {
+				"Subject": {
+					"DNSNames": [
+						"localhost",
+						"bookstore.bookstore.svc.cluster.local"
+					]
+				}
+			}
+		},
+		"bookstoreV2Cert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false,
+			"Cert": {
+				"Subject": {
+					"DNSNames": [
+						"localhost",
+						"bookstore-v2.bookstore.svc.cluster.local"
+					]
+				}
+			}
+		},
+		"bookthiefCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false,
+			"Cert": {
+				"Subject": {
+					"DNSNames": [
+						"localhost",
+						"bookthief.bookthief.svc.cluster.local"
+					]
+				}
+			}
+		},
 		"sqlCert": {
 			"Type": "cert-ecdsa",
 			"Size": 256,
@@ -189,6 +241,7 @@
 			"Incoming": [
 				{
 					"Port": "14001",
+					"Cert": "bookbuyerCert",
 					"DisableClientAuth": true
 				}
 			]
@@ -203,6 +256,7 @@
 			"Incoming": [
 				{
 					"Port": "14001",
+					"Cert": "bookstoreCert",
 					"DisableClientAuth": true
 				}
 			]
@@ -217,6 +271,7 @@
 			"Incoming": [
 				{
 					"Port": "14001",
+					"Cert": "bookstoreV2Cert",
 					"DisableClientAuth": true
 				}
 			]
@@ -235,6 +290,7 @@
 			"Incoming": [
 				{
 					"Port": "14001",
+					"Cert": "bookthiefCert",
 					"DisableClientAuth": true
 				}
 			]
