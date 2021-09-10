@@ -68,7 +68,7 @@
 				}
 			},
 			"TLS": [
-				"bookstore-tls"
+				"bookbuyer-tls"
 			]
 		},
 		"bookthief": {
@@ -86,7 +86,7 @@
 				}
 			},
 			"TLS": [
-				"bookstore-tls"
+				"bookthief-tls"
 			]
 		},
 		"bookstore": {
@@ -120,7 +120,7 @@
 				}
 			},
 			"TLS": [
-				"bookstore-tls"
+				"bookstoreV2-tls"
 			]
 		},
 		"bookwarehouse": {
@@ -142,7 +142,22 @@
 		}
 	},
 	"Secrets": {
-		"webpageCert": {
+		"bookbuyerCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false
+		},
+		"bookstoreCert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false
+		},
+		"bookstoreV2Cert": {
+			"Type": "cert-ecdsa",
+			"Size": 256,
+			"Shared": false
+		},
+		"bookthiefCert": {
 			"Type": "cert-ecdsa",
 			"Size": 256,
 			"Shared": false
@@ -184,17 +199,17 @@
 			"Outgoing": [
 				{
 					"Port": "14001",
-					"Addr": "bookstore.bookstore"
+					"Addr": "bookstore.bookstore.svc.cluster.local"
 				},
 				{
 					"Port": "14001",
-					"Addr": "bookstore-v2.bookstore"
+					"Addr": "bookstore-v2.bookstore.svc.cluster.local"
 				}
 			],
 			"Incoming": [
 				{
 					"Port": "14001",
-					"Cert": "webpageCert",
+					"Cert": "bookbuyerCert",
 					"DisableClientAuth": true
 				}
 			]
@@ -203,13 +218,28 @@
 			"Outgoing": [
 				{
 					"Port": "14001",
-					"Addr": "bookwarehouse.bookwarehouse"
+					"Addr": "bookwarehouse.bookwarehouse.svc.cluster.local"
 				}
 			],
 			"Incoming": [
 				{
 					"Port": "14001",
-					"Cert": "webpageCert",
+					"Cert": "bookstoreCert",
+					"DisableClientAuth": true
+				}
+			]
+		},
+		"bookstoreV2-tls": {
+			"Outgoing": [
+				{
+					"Port": "14001",
+					"Addr": "bookwarehouse.bookwarehouse.svc.cluster.local"
+				}
+			],
+			"Incoming": [
+				{
+					"Port": "14001",
+					"Cert": "bookstoreV2Cert",
 					"DisableClientAuth": true
 				}
 			]
@@ -218,17 +248,17 @@
 			"Outgoing": [
 				{
 					"Port": "14001",
-					"Addr": "bookstore.bookstore"
+					"Addr": "bookstore.bookstore.svc.cluster.local"
 				},
 				{
 					"Port": "14001",
-					"Addr": "bookstore-v2.bookstore"
+					"Addr": "bookstore-v2.bookstore.svc.cluster.local"
 				}
 			],
 			"Incoming": [
 				{
 					"Port": "14001",
-					"Cert": "webpageCert",
+					"Cert": "bookthiefCert",
 					"DisableClientAuth": true
 				}
 			]
