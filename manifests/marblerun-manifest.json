@@ -38,7 +38,8 @@
 					"EROCKSDB_MASTERKEY": "{{ hex .Secrets.edbMasterKey.Private }}",
 					"EDB_ROOT_CERT": "{{ pem .Secrets.edbRootCert.Cert }}",
 					"EDB_ROOT_KEY": "{{ pem .Secrets.edbRootCert.Private }}",
-					"EDG_EDB_MANIFEST_FILE": "/data/manifest.json"
+					"EDG_EDB_MANIFEST_FILE": "/data/manifest.json",
+					"EDG_EDB_CERT_DNS": "mysql.bookwarehouse"
 				},
 				"Argv": [
 					"./edb",
@@ -169,7 +170,8 @@
 				},
 				"DNSNames": [
 					"localhost",
-					"edgelessdb-sql-api.edgelessdb.svc.cluster.local"
+					"edgelessdb-sql-api.edgelessdb.svc.cluster.local",
+					"mysql.bookwarehouse"
 				]
 			}
 		}

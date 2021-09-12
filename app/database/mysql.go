@@ -41,7 +41,7 @@ func GetMySQLConnection() (*gorm.DB, error) {
 	})
 
 	// Create MySQL connection with the above created TLS configuration
-	connStr := fmt.Sprintf("%s@tcp(%s:%d)/%s?tls=%s&charset=utf8mb4&timeout=20s", dbuser, "127.0.0.1", dbport, dbname, "edgelessdb")
+	connStr := fmt.Sprintf("%s@tcp(%s:%d)/%s?tls=%s&charset=utf8mb4&timeout=20s", dbuser, "mysql.bookwarehouse", dbport, dbname, "edgelessdb")
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DriverName: "mysql",
 		DSN:        connStr,
