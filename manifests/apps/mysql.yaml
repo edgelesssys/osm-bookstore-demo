@@ -35,7 +35,7 @@ spec:
       labels:
         app: mysql
         marblerun/marbletype: edgelessdb
-        marblerun/marblecontainer: edgelessdb
+        marblerun/marblecontainer: mysql
     spec:
       serviceAccountName: mysql
       nodeSelector:
@@ -44,11 +44,6 @@ spec:
       - image: ghcr.io/edgelesssys/edgelessdb-sgx-4gb # TODO: Switch to 1 GB?
         imagePullPolicy: IfNotPresent
         name: mysql
-        env:
-        - name: EDG_MARBLE_TYPE
-          value: "edgelessdb"
-        - name: EDG_MARBLE_COORDINATOR_ADDR
-          value: "coordinator-mesh-api.marblerun:2001"
         args: ["-marble"]
         ports:
           - containerPort: 3306
