@@ -6,7 +6,7 @@ Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/
 
 * All traffic is end to end encrypted using certificates supplied by MarbleRun
 * Webpage templates are embedded into the applications, instead of loaded from an unsecure host filesystem
-* [Not yet implemented] `bookwarehouse` uses [EdgelessDB](https://github.com/edgelesssys/edgelessdb) as a storage backend instead of MySQL
+* `bookwarehouse` uses [EdgelessDB](https://github.com/edgelesssys/edgelessdb) as a storage backend instead of MySQL
 
 ## Requirements:
 * a cluster running Kubernetes v1.19 or greater (e.g. [`minikube`](https://minikube.sigs.k8s.io/docs/start/)) with [SGX enabled nodes](https://docs.edgeless.systems/marblerun/#/deployment/kubernetes)
@@ -90,6 +90,7 @@ osm install --set=OpenServiceMesh.enablePermissiveTrafficPolicy=true --set=OpenS
 ### Deploy the applications
 
 ```bash
+kubectl apply -f manifests/apps/mysql.yaml
 kubectl apply -f manifests/apps/bookwarehouse.yaml
 kubectl apply -f manifests/apps/bookstore.yaml
 kubectl apply -f manifests/apps/bookbuyer.yaml
