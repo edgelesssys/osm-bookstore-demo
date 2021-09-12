@@ -41,7 +41,7 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       containers:
-      - image: ghcr.io/edgelesssys/edgelessdb-sgx-4gb # TODO: Switch to 1 GB?
+      - image: ghcr.io/edgelesssys/edgelessdb-sgx-1gb
         imagePullPolicy: IfNotPresent
         name: mysql
         args: ["-marble"]
