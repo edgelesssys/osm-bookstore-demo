@@ -1,0 +1,58 @@
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha3
+metadata:
+  name: mysql
+  namespace: bookwarehouse
+spec:
+  destination:
+    kind: ServiceAccount
+    name: mysql
+    namespace: bookwarehouse
+  rules:
+  - kind: TCPRoute
+    name: tcp-route
+  sources:
+  - kind: ServiceAccount
+    name: bookwarehouse
+    namespace: bookwarehouse
+---
+apiVersion: specs.smi-spec.io/v1alpha4
+kind: TCPRoute
+metadata:
+  name: tcp-route
+  namespace: bookwarehouse
+spec:
+  matches:
+    ports:
+    - 3306
+---
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha3
+metadata:
+  name: bookwarehouse
+  namespace: bookwarehouse
+spec:
+  destination:
+    kind: ServiceAccount
+    name: bookwarehouse
+    namespace: bookwarehouse
+  rules:
+  - kind: TCPRoute
+    name: bookwarehouse-service-route
+  sources:
+  - kind: ServiceAccount
+    name: bookstore
+    namespace: bookstore
+  - kind: ServiceAccount
+    name: bookstore-v2
+    namespace: bookstore
+---
+apiVersion: specs.smi-spec.io/v1alpha4
+kind: TCPRoute
+metadata:
+  name: bookwarehouse-service-route
+  namespace: bookwarehouse
+spec:
+  matches:
+    ports:
+    - 14001
