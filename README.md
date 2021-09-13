@@ -199,6 +199,12 @@ Apply the [SMI Traffic Target][https://github.com/servicemeshinterface/smi-spec/
 
     Restart `./scripts/port-forward-all.sh`
 
+1. Allow traffic to `bookwarehouse` and the SQL storage backend
+
+    ```bash
+    kubectl apply -f manifests/access/bookwarehouse-access.yaml
+    ```
+
 1. Allow traffic between `bookstore`, `bookbuyer`, and `bookthief`
 
     ```bash
