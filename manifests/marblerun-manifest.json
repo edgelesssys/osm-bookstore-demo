@@ -147,38 +147,21 @@
 			"Size": 256,
 			"Shared": false,
 			"Cert": {
-				"Subject": {
-					"DNSNames": [
-						"localhost",
-						"bookbuyer.bookbuyer.svc.cluster.local"
-					]
-				}
+				"DNSNames": [
+					"localhost",
+					"bookbuyer.bookbuyer.svc.cluster.local"
+				]
 			}
 		},
 		"bookstoreCert": {
 			"Type": "cert-ecdsa",
 			"Size": 256,
-			"Shared": false,
+			"Shared": true,
 			"Cert": {
-				"Subject": {
-					"DNSNames": [
-						"localhost",
-						"bookstore.bookstore.svc.cluster.local"
-					]
-				}
-			}
-		},
-		"bookstoreV2Cert": {
-			"Type": "cert-ecdsa",
-			"Size": 256,
-			"Shared": false,
-			"Cert": {
-				"Subject": {
-					"DNSNames": [
-						"localhost",
-						"bookstore-v2.bookstore.svc.cluster.local"
-					]
-				}
+				"DNSNames": [
+					"localhost",
+					"bookstore.bookstore.svc.cluster.local"
+				]
 			}
 		},
 		"bookthiefCert": {
@@ -186,12 +169,10 @@
 			"Size": 256,
 			"Shared": false,
 			"Cert": {
-				"Subject": {
-					"DNSNames": [
-						"localhost",
-						"bookthief.bookthief.svc.cluster.local"
-					]
-				}
+				"DNSNames": [
+					"localhost",
+					"bookthief.bookthief.svc.cluster.local"
+				]
 			}
 		},
 		"sqlCert": {
@@ -232,10 +213,6 @@
 				{
 					"Port": "14001",
 					"Addr": "bookstore.bookstore.svc.cluster.local"
-				},
-				{
-					"Port": "14001",
-					"Addr": "bookstore-v2.bookstore.svc.cluster.local"
 				}
 			],
 			"Incoming": [
@@ -271,7 +248,7 @@
 			"Incoming": [
 				{
 					"Port": "14001",
-					"Cert": "bookstoreV2Cert",
+					"Cert": "bookstoreCert",
 					"DisableClientAuth": true
 				}
 			]
@@ -281,10 +258,6 @@
 				{
 					"Port": "14001",
 					"Addr": "bookstore.bookstore.svc.cluster.local"
-				},
-				{
-					"Port": "14001",
-					"Addr": "bookstore-v2.bookstore.svc.cluster.local"
 				}
 			],
 			"Incoming": [
