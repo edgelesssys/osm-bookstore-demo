@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:experimental
 
 FROM alpine/git:latest AS pull
-# Cloning the repo
-#RUN --mount=type=secret,id=repoaccess,dst=/root/.netrc,required=true git clone https://github.com/edgelesssys/osm-bookstore-demo.git /osm
-COPY . /osm
+RUN git clone https://github.com/edgelesssys/osm-bookstore-demo.git /osm
+# Copy the repo for testing of local changes
+# COPY . /osm
 
 FROM ghcr.io/edgelesssys/ego-dev:latest AS build
 COPY --from=pull /osm /osm
