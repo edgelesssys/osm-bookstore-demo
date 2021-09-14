@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/edgelesssys/ego/marble"
-	mysql_driver "github.com/go-sql-driver/mysql"
+	mysqlDriver "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -35,7 +35,7 @@ func GetMySQLConnection() (*gorm.DB, error) {
 	}
 
 	// Register SQL TLS config in the MySQL driver
-	mysql_driver.RegisterTLSConfig("edgelessdb", &tls.Config{
+	mysqlDriver.RegisterTLSConfig("edgelessdb", &tls.Config{
 		RootCAs:      rootCertPool,
 		Certificates: []tls.Certificate{cert},
 	})
