@@ -352,14 +352,6 @@ We will now demonstrate Open Service Meshe's traffic split feature, by dividing 
     DOCKER_REGISTRY=<your_registry> SIGNING_KEY=private.pem make docker
     ```
 
-
-# TODO:
-* The book warehouse recently switched to MySQL for storage... Wouldn't it be interesting to integrate EdgelessDB here, too?
-
-* Changes to MarbleRun helm chart:
-    * Disable side-car injection for webhook with `openservicemesh.io/sidecar-injection: disabled` annotation
-    * Mark service ports of coordinator explictly for TCP connections using `appProtocol: tcp` as part of port spec
-
 >Note: If you build your own images, you will have to change the used images in `manifests/apps/`
 
 ## License
