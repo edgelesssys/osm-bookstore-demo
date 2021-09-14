@@ -4,7 +4,7 @@ Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/
 
 ## Changes made to the original demo
 
-* All traffic is end to end encrypted using MarbleRun's [Transparent TLS feature](https://docs.edgeless.systems/marblerun/#/features/transparent-TLS). No changes to source code required!
+* All traffic between `bookbuyer`, `bookstore`, and `bookthief`, including connections to their webpage, is end-to-end encrypted using MarbleRun's [Transparent TLS feature](https://docs.edgeless.systems/marblerun/#/features/transparent-TLS). No changes to source code required!
 * Webpage templates are embedded into the applications, instead of loaded from an unsecure host filesystem
 * `bookwarehouse` uses [EdgelessDB](https://github.com/edgelesssys/edgelessdb) as a storage backend instead of MySQL
 
