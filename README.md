@@ -4,7 +4,7 @@ Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/
 
 ## Changes made to the original demo
 
-* All traffic is end to end encrypted using certificates supplied by MarbleRun
+* All traffic between `bookbuyer`, `bookstore`, and `bookthief`, including connections to their webpage, is end-to-end encrypted using MarbleRun's [Transparent TLS feature](https://docs.edgeless.systems/marblerun/#/features/transparent-TLS). No changes to source code required!
 * Webpage templates are embedded into the applications, instead of loaded from an unsecure host filesystem
 * `bookwarehouse` uses [EdgelessDB](https://github.com/edgelesssys/edgelessdb) as a storage backend instead of MySQL
 
@@ -147,7 +147,7 @@ In a browser, open up the following urls:
 * https://localhost:8082 - bookstore-v2
     - _Note: This page will not be available at this time in the demo. This will become available during the SMI Traffic Split configuration set up_
 
-You’ll be presented with a certificate warning, because your browser does not know MarbleRun’s root certificate (the authority that issued the used TLS certificates) as a root of trust. You can safely ignore this message, since theauthenticity of the MarbleRun instance has been verified every time the MarbleRun CLI connected to the Coordinator.
+You’ll be presented with a certificate warning, because your browser does not know MarbleRun’s root certificate (the authority that issued the used TLS certificates) as a root of trust. You can safely ignore this message for now and proceed to the website.
 You should see increasing numbers in books bought/stolen for bookbuyer and bookthief, as well as increasing numbers in books sold for bookstore.
 
 Alternatively you can run the `bookwatcher` terminal application to view the statistics in a single terminal window.

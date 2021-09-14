@@ -133,11 +133,11 @@ const BookthiefTemplate = `<!doctype html>
             font: 2.2em "Fira Sans", sans-serif;
         }
         #main {
-            padding: 5pt 5pt 5pt 5pt;
+            padding: 10pt 10pt 10pt 10pt;
             font: 1.8em "Fira Sans", sans-serif;
         }
         li {
-            padding: 5pt 5pt 5pt 5pt;
+            padding: 10pt 10pt 10pt 10pt;
             font: 1.2em "Consolas", sans-serif;
         }
       </style>
