@@ -48,3 +48,6 @@ spec:
         - name: bookwarehouse
           image: ghcr.io/edgelesssys/osm-bookstore-demo/bookwarehouse:latest
           imagePullPolicy: IfNotPresent
+          env:
+          - name: EDG_MARBLE_DNS_NAMES
+            value: "bookwarehouse.bookwarehouse.svc.cluster.local"
