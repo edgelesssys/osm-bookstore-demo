@@ -169,8 +169,6 @@
 					]
 				},
 				"DNSNames": [
-					"localhost",
-					"edgelessdb-sql-api.edgelessdb.svc.cluster.local",
 					"mysql.bookwarehouse"
 				]
 			}
