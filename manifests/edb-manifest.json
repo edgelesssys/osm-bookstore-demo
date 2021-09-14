@@ -1,0 +1,9 @@
+{
+    "sql": [
+        "CREATE USER bookwarehouse@'%' REQUIRE ISSUER '/CN=MarbleRun Coordinator - Intermediate CA' SUBJECT '/CN=bookwarehouse'",
+        "CREATE DATABASE booksdemo",
+        "GRANT ALTER, CREATE, SELECT, INSERT, UPDATE ON booksdemo.* TO bookwarehouse@'%'"
+    ],
+    "ca": "{{ js (pem .MarbleRun.RootCA.Cert) }}",
+    "debug": true
+}

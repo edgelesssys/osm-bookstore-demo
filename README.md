@@ -6,7 +6,7 @@ Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/
 
 * All traffic is end to end encrypted using certificates supplied by MarbleRun
 * Webpage templates are embedded into the applications, instead of loaded from an unsecure host filesystem
-* [Not yet implemented] `bookwarehouse` uses [EdgelessDB](https://github.com/edgelesssys/edgelessdb) as a storage backend instead of MySQL
+* `bookwarehouse` uses [EdgelessDB](https://github.com/edgelesssys/edgelessdb) as a storage backend instead of MySQL
 
 ## Requirements:
 * a cluster running Kubernetes v1.19 or greater (e.g. [`minikube`](https://minikube.sigs.k8s.io/docs/start/)) with [SGX enabled nodes](https://docs.edgeless.systems/marblerun/#/deployment/kubernetes)
@@ -90,6 +90,7 @@ osm install --set=OpenServiceMesh.enablePermissiveTrafficPolicy=true --set=OpenS
 ### Deploy the applications
 
 ```bash
+kubectl apply -f manifests/apps/mysql.yaml
 kubectl apply -f manifests/apps/bookwarehouse.yaml
 kubectl apply -f manifests/apps/bookstore.yaml
 kubectl apply -f manifests/apps/bookbuyer.yaml
@@ -197,6 +198,12 @@ Apply the [SMI Traffic Target][https://github.com/servicemeshinterface/smi-spec/
     ```
 
     Restart `./scripts/port-forward-all.sh`
+
+1. Allow traffic to `bookwarehouse` and the SQL storage backend
+
+    ```bash
+    kubectl apply -f manifests/access/bookwarehouse-access.yaml
+    ```
 
 1. Allow traffic between `bookstore`, `bookbuyer`, and `bookthief`
 
@@ -344,14 +351,6 @@ We will now demonstrate Open Service Meshe's traffic split feature, by dividing 
     ```
     DOCKER_REGISTRY=<your_registry> SIGNING_KEY=private.pem make docker
     ```
-
-
-# TODO:
-* The book warehouse recently switched to MySQL for storage... Wouldn't it be interesting to integrate EdgelessDB here, too?
-
-* Changes to MarbleRun helm chart:
-    * Disable side-car injection for webhook with `openservicemesh.io/sidecar-injection: disabled` annotation
-    * Mark service ports of coordinator explictly for TCP connections using `appProtocol: tcp` as part of port spec
 
 >Note: If you build your own images, you will have to change the used images in `manifests/apps/`
 
