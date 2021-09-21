@@ -1,6 +1,6 @@
 # MarbleRun - OSM demo
 
-Based on the [bookstore demo ](https://docs.openservicemesh.io/docs/getting_started/quickstart/manual_demo/) by [Open Service Mesh](https://github.com/openservicemesh/osm), this demo showcases how [MarbleRun](https://github.com/edgelesssys/marblerun) can be integrated into a Kubernetes cluster managed with OSM.
+Based on the [bookstore demo](https://docs.openservicemesh.io/docs/getting_started/quickstart/manual_demo/) by [Open Service Mesh](https://github.com/openservicemesh/osm), this demo showcases how [MarbleRun](https://github.com/edgelesssys/marblerun) can be integrated into a Kubernetes cluster managed with OSM.
 
 ## Changes made to the original demo
 
