@@ -65,7 +65,7 @@ var (
 	// otherwise DNS will not be able to resolve it.
 	// https://kubernetes.io/docs/setup/production-environment/windows/intro-windows-in-kubernetes/#dns-limitations
 	bookstoreService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", bookstoreServiceName, bookstoreNamespace, bookstorePort)
-	warehouseService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", bookwarehouseNamespace, warehouseServiceName, bookwarehousePort)
+	warehouseService = fmt.Sprintf("%s.%s.svc.cluster.local:%d", warehouseServiceName, bookwarehouseNamespace, bookwarehousePort)
 	booksBought      = fmt.Sprintf("http://%s/books-bought", bookstoreService)
 	buyBook          = fmt.Sprintf("http://%s/buy-a-book/new", bookstoreService)
 	chargeAccountURL = fmt.Sprintf("http://%s/%s", warehouseService, RestockWarehouseURL)
