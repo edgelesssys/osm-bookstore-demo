@@ -1,6 +1,6 @@
 # MarbleRun - OSM demo
 
-Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/demo) by [Open Service Mesh](https://openservicemesh.io/), this demo showcases how [MarbleRun](https://github.com/edgelesssys/marblerun) can be integrated into a Kubernetes cluster managed with OSM.
+Based on the [bookstore demo ](https://docs.openservicemesh.io/docs/getting_started/quickstart/manual_demo/) by [Open Service Mesh](https://github.com/openservicemesh/osm), this demo showcases how [MarbleRun](https://github.com/edgelesssys/marblerun) can be integrated into a Kubernetes cluster managed with OSM.
 
 ## Changes made to the original demo
 
@@ -10,8 +10,6 @@ Based on the [bookstore demo ](https://github.com/openservicemesh/osm/tree/main/
 
 ## Requirements:
 * a cluster running Kubernetes v1.19 or greater (e.g. [`minikube`](https://minikube.sigs.k8s.io/docs/start/)) with [SGX enabled nodes](https://docs.edgeless.systems/marblerun/#/deployment/kubernetes)
-* a workstation capable of executing Bash scripts
-* Go v1.16 or greater
 * Docker with `buildx` support
 * The [MarbleRun command-line tool](https://docs.edgeless.systems/marblerun/#/reference/cli)
 * The [OSM command-line tool](https://docs.openservicemesh.io/docs/guides/cli/) setup
@@ -100,7 +98,7 @@ kubectl apply -f manifests/apps/bookthief.yaml
 ## Checkpoint: What go installed?
 
 The Open Service Mesh control plane and MarbleRun's control plane.
-A Kubernetes Deployment and pods for each of `bookbuyer`, `bookthief`, `bookstore` and `bookwarehouse`. Also, Kubernetes Services and Endpoints for `bookstore` and `bookwarehouse`.
+A Kubernetes Deployment and pods for each of `bookbuyer`, `bookthief`, `bookstore`, `bookwarehouse`, and EdgelessDB. Also, Kubernetes Services and Endpoints for `bookstore`, `bookwarehouse`, and EdgelessDB.
 
 To view these resources on your cluster, run the following commands:
 ```bash
@@ -151,6 +149,7 @@ You’ll be presented with a certificate warning, because your browser does not 
 You should see increasing numbers in books bought/stolen for bookbuyer and bookthief, as well as increasing numbers in books sold for bookstore.
 
 Alternatively you can run the `bookwatcher` terminal application to view the statistics in a single terminal window.
+`bookwatcher` uses MarbleRun's root certificate to verify TLS connections to the other applications.
 ```bash
 go run app/bookwatcher/bookwatcher.go -c marblerun.crt
 ```
@@ -184,7 +183,7 @@ kubectl logs -n bookthief deployment/bookthief bookthief
 ## Deploy SMI access control policies
 At this point, applications do not have access to each other because no access control policies have been applied.
 
-Apply the [SMI Traffic Target][https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-access/v1alpha3/traffic-access.md] and [SMI Traffic Specs][https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-specs/v1alpha4/traffic-specs.md] resources to define access control and routing policies for the applications to communicate:
+Apply the [SMI Traffic Target](https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-access/v1alpha3/traffic-access.md) and [SMI Traffic Specs](https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-specs/v1alpha4/traffic-specs.md) resources to define access control and routing policies for the applications to communicate:
 
 1. Allow traffic to the MarbleRun Coordinator
 
