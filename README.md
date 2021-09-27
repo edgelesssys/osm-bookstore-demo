@@ -79,12 +79,6 @@ osm install --set=OpenServiceMesh.enablePermissiveTrafficPolicy=true --set=OpenS
     osm namespace add bookstore bookbuyer bookthief bookwarehouse
     ```
 
-1. Enable the namespaces for injection by MarbleRun
-
-    ```bash
-    marblerun namespace add bookstore bookbuyer bookthief bookwarehouse
-    ```
-
 ### Deploy the applications
 
 ```bash
